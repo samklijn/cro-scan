@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -19,125 +20,125 @@
 }
 body{font-family:var(--fn);background:var(--bg);color:var(--ink);line-height:1.5;min-height:100vh;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
 
-/* ── SETUP MODAL ── */
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(6px);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
-.modal{background:var(--sur);border:1px solid var(--bd);border-radius:16px;padding:32px;max-width:460px;width:100%}
-.modal-logo{display:flex;align-items:center;gap:10px;margin-bottom:24px}
-.modal-mark{width:32px;height:32px;background:var(--g);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff}
-.modal-brand{font-weight:800;font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--g)}
-.modal h2{font-size:20px;font-weight:800;margin-bottom:8px}
-.modal p{font-size:13.5px;color:var(--muted);line-height:1.6;margin-bottom:20px}
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{background:var(--sur);border:1px solid var(--bd);border-radius:16px;padding:36px;max-width:460px;width:100%}
+.modal-logo{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+.modal-mark{width:34px;height:34px;background:var(--g);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;color:#fff}
+.modal-brand{font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--g)}
+.modal h2{font-size:21px;font-weight:800;margin-bottom:8px}
+.modal p{font-size:13.5px;color:var(--muted);line-height:1.65;margin-bottom:22px}
 .modal-link{color:var(--gl);text-decoration:none;font-weight:700}
 .modal-link:hover{text-decoration:underline}
-.modal-field{margin-bottom:14px}
 .modal-lbl{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;display:block}
-.modal-input{width:100%;padding:12px 14px;background:var(--bg);border:1px solid var(--bd);border-radius:var(--rsm);color:var(--ink);font-family:var(--fn);font-size:14px;outline:none;transition:border-color .15s}
+.modal-input{width:100%;padding:13px 15px;background:var(--bg);border:1px solid var(--bd);border-radius:var(--rsm);color:var(--ink);font-family:var(--fn);font-size:14px;outline:none;transition:border-color .15s;margin-bottom:14px}
 .modal-input:focus{border-color:var(--g)}
 .modal-input::placeholder{color:var(--koud)}
-.modal-btn{width:100%;padding:13px;background:var(--g);color:#fff;border:none;border-radius:var(--rsm);font-family:var(--fn);font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:background .15s}
+.modal-btn{width:100%;padding:14px;background:var(--g);color:#fff;border:none;border-radius:var(--rsm);font-family:var(--fn);font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:background .15s}
 .modal-btn:hover{background:var(--gl)}
-.modal-note{font-size:11.5px;color:var(--koud);margin-top:12px;text-align:center}
+.modal-note{font-size:11.5px;color:var(--koud);margin-top:12px;text-align:center;line-height:1.5}
 
-/* ── TOP BAR ── */
-.top{position:sticky;top:0;z-index:20;background:rgba(12,12,12,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 22px;height:52px;display:flex;align-items:center;gap:12px}
-.s-mark{width:26px;height:26px;background:var(--g);border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;flex-shrink:0}
-.v-sep{width:1px;height:20px;background:var(--line)}
+/* TOP BAR */
+.top{position:sticky;top:0;z-index:20;background:rgba(12,12,12,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:0 24px;height:54px;display:flex;align-items:center;gap:14px}
+.s-mark{width:28px;height:28px;background:var(--g);border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#fff;flex-shrink:0}
+.v-sep{width:1px;height:22px;background:var(--line)}
 .brand-name{font-weight:800;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--g);line-height:1.1}
 .brand-sub{font-size:9px;font-weight:600;letter-spacing:.07em;color:var(--muted);margin-top:1px}
 .top-right{margin-left:auto;display:flex;align-items:center;gap:10px}
 .top-score{padding:4px 14px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.04em;display:none}
-.key-btn{background:none;border:1px solid var(--bd);color:var(--koud);font-family:var(--fn);font-size:11px;padding:5px 12px;border-radius:999px;cursor:pointer;transition:border-color .15s,color .15s}
+.key-btn{background:none;border:1px solid var(--bd);color:var(--koud);font-family:var(--fn);font-size:10.5px;padding:5px 12px;border-radius:999px;cursor:pointer;transition:border-color .15s,color .15s;letter-spacing:.03em}
 .key-btn:hover{border-color:var(--g);color:var(--gl)}
 
-/* ── HERO ── */
-.hero{display:flex;flex-direction:column;align-items:center;text-align:center;padding:52px 20px 40px;transition:padding .3s}
-.eyebrow{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gl);margin-bottom:18px}
-h1{font-size:clamp(28px,5vw,48px);font-weight:800;letter-spacing:-.015em;line-height:1.05;margin-bottom:12px}
+/* HERO */
+.hero{display:flex;flex-direction:column;align-items:center;text-align:center;padding:56px 20px 44px}
+.eyebrow{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gl);margin-bottom:20px}
+h1{font-size:clamp(30px,5.5vw,50px);font-weight:800;letter-spacing:-.02em;line-height:1.04;margin-bottom:14px}
 h1 em{font-style:normal;color:var(--gl)}
-.sub{font-size:15px;color:var(--muted);max-width:44ch;line-height:1.65;margin-bottom:32px}
+.sub{font-size:15px;color:var(--muted);max-width:44ch;line-height:1.7;margin-bottom:36px}
 
-/* ── SEARCH ── */
-.search-wrap{width:100%;max-width:600px}
+/* SEARCH */
+.search-wrap{width:100%;max-width:620px}
 .search-box{width:100%;background:var(--sur);border:1px solid var(--bd);border-radius:999px;display:flex;align-items:center;transition:border-color .15s,box-shadow .15s;overflow:hidden}
-.search-box:focus-within{border-color:var(--g);box-shadow:0 0 0 1px var(--g)}
-.url-ico{padding:0 4px 0 18px;color:var(--koud);display:flex;align-items:center;flex-shrink:0}
-.url-in{flex:1;padding:15px 10px;font-family:var(--fn);font-size:15px;background:transparent;border:none;color:var(--ink);outline:none;min-width:0;font-weight:600}
+.search-box:focus-within{border-color:var(--g);box-shadow:0 0 0 2px rgba(124,167,63,.15)}
+.url-ico{padding:0 5px 0 20px;color:var(--koud);display:flex;align-items:center;flex-shrink:0}
+.url-in{flex:1;padding:16px 10px;font-family:var(--fn);font-size:15px;background:transparent;border:none;color:var(--ink);outline:none;min-width:0;font-weight:600}
 .url-in::placeholder{color:var(--koud);font-weight:400}
 .url-in:disabled{opacity:.5}
-.scan-btn{margin:5px;padding:11px 22px;background:var(--g);color:#fff;border:none;font-family:var(--fn);font-size:12.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;cursor:pointer;flex-shrink:0;transition:background .15s,transform .1s;display:flex;align-items:center;gap:7px}
+.scan-btn{margin:5px;padding:12px 24px;background:var(--g);color:#fff;border:none;font-family:var(--fn);font-size:12.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;border-radius:999px;cursor:pointer;flex-shrink:0;transition:background .15s,transform .1s;display:flex;align-items:center;gap:7px}
 .scan-btn:hover{background:var(--gl)}
 .scan-btn:active{transform:scale(.97)}
-.scan-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.scan-btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
 
-/* ── STATUS ── */
-.status-bar{width:100%;max-width:600px;margin-top:14px;display:none;background:var(--sur);border:1px solid var(--bd);border-radius:var(--r);padding:16px 20px}
+/* STATUS */
+.status-bar{width:100%;max-width:620px;margin-top:14px;display:none;background:var(--sur);border:1px solid var(--bd);border-radius:var(--r);padding:18px 22px}
 .status-bar.show{display:block}
 .st-lbl{font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gl);margin-bottom:6px}
 .st-url{font-size:12.5px;color:var(--muted);word-break:break-all;margin-bottom:12px}
 .st-row{display:flex;align-items:center;gap:10px;font-size:13.5px}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--gl);flex-shrink:0;animation:blink 1.2s ease-in-out infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.15}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.12}}
 .st-err{color:var(--rood);font-size:13.5px}
 
-/* ── PILLS ── */
-.dims{width:100%;max-width:600px;display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:28px}
+/* PILLS */
+.dims{width:100%;max-width:620px;display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:32px}
 .dim-pill{font-size:11px;font-weight:600;padding:5px 13px;border-radius:999px;background:var(--sur);border:1px solid var(--bd);color:var(--muted);display:flex;align-items:center;gap:5px}
 .dim-n{font-size:9px;font-weight:800;letter-spacing:.06em;color:var(--gl)}
 .dim-pt{font-size:9px;color:var(--koud);margin-left:2px}
 
-/* ── RESULTS ── */
-.results{padding:0 20px 64px;max-width:820px;margin:0 auto;width:100%;display:none}
-
-.res-head{text-align:center;padding:36px 0 32px}
-.res-domain{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
-.res-domain a{color:var(--muted);text-decoration:none}
+/* RESULTS */
+.results{padding:0 20px 64px;max-width:840px;margin:0 auto;width:100%;display:none}
+.res-head{text-align:center;padding:40px 0 36px}
+.res-domain{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+.res-domain a{color:var(--muted);text-decoration:none;transition:color .12s}
 .res-domain a:hover{color:var(--gl)}
-.score-wrap{display:inline-flex;flex-direction:column;align-items:center;gap:4px}
-.score-num{font-size:76px;font-weight:800;letter-spacing:-.04em;line-height:1}
-.score-sub{font-size:15px;color:var(--muted);font-weight:600}
-.verdict{margin-top:8px;display:inline-block;padding:5px 16px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
-.good{color:var(--gl)} .bg-good{background:rgba(137,182,71,.1);border:1px solid rgba(137,182,71,.22);color:var(--gl)}
-.mid{color:#d4a832} .bg-mid{background:rgba(212,168,50,.1);border:1px solid rgba(212,168,50,.22);color:#d4a832}
-.low{color:var(--rood)} .bg-low{background:rgba(217,113,62,.1);border:1px solid rgba(217,113,62,.22);color:var(--rood)}
+.score-wrap{display:inline-flex;flex-direction:column;align-items:center;gap:5px}
+.score-num{font-size:82px;font-weight:800;letter-spacing:-.04em;line-height:1}
+.score-sub{font-size:16px;color:var(--muted);font-weight:600}
+.verdict{margin-top:10px;display:inline-block;padding:6px 18px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase}
+.good{color:var(--gl)}.bg-good{background:rgba(137,182,71,.1);border:1px solid rgba(137,182,71,.22);color:var(--gl)}
+.mid{color:#d4a832}.bg-mid{background:rgba(212,168,50,.1);border:1px solid rgba(212,168,50,.22);color:#d4a832}
+.low{color:var(--rood)}.bg-low{background:rgba(217,113,62,.1);border:1px solid rgba(217,113,62,.22);color:var(--rood)}
 
-.dim-row{background:var(--sur);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:8px;transition:border-color .12s}
+.dim-row{background:var(--sur);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:8px;transition:border-color .15s}
 .dim-row:hover{border-color:var(--line)}
-.dim-head{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;user-select:none}
-.dnb{font-size:9.5px;font-weight:800;letter-spacing:.06em;color:var(--gl);background:rgba(137,182,71,.1);padding:3px 8px;border-radius:999px;flex-shrink:0}
+.dim-head{display:flex;align-items:center;gap:13px;padding:15px 18px;cursor:pointer;user-select:none}
+.dnb{font-size:9.5px;font-weight:800;letter-spacing:.07em;color:var(--gl);background:rgba(137,182,71,.1);padding:3px 9px;border-radius:999px;flex-shrink:0}
 .dtitle{font-size:14px;font-weight:700;flex:1}
 .dscore{display:flex;align-items:baseline;gap:3px;flex-shrink:0}
-.dscore-val{font-size:19px;font-weight:800}
+.dscore-val{font-size:20px;font-weight:800}
 .dscore-max{font-size:11px;color:var(--muted)}
 .chev{color:var(--koud);transition:transform .2s;flex-shrink:0}
 .chev.open{transform:rotate(180deg)}
-.dbar{height:3px;background:var(--line);margin:0 16px}
+.dbar{height:3px;background:var(--line);margin:0 18px}
 .dbar-fill{height:100%;border-radius:999px;transition:width .5s ease}
-.dbody{padding:0 16px 16px;display:none}
+.dbody{padding:0 18px 18px;display:none}
 .dbody.open{display:block}
-.fb-lbl{font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:14px 0 8px}
-.fb-item{display:flex;gap:10px;padding:10px 14px;background:var(--bg);border:1px solid var(--bd);border-radius:var(--rsm);margin-bottom:6px}
-.fb-dot{width:5px;height:5px;border-radius:50%;background:var(--rood);flex-shrink:0;margin-top:7px}
+.fb-lbl{font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:16px 0 9px}
+.fb-item{display:flex;gap:11px;padding:11px 15px;background:var(--bg);border:1px solid var(--bd);border-radius:var(--rsm);margin-bottom:7px}
+.fb-dot{width:5px;height:5px;border-radius:50%;background:var(--g);flex-shrink:0;margin-top:8px}
 .fb-text{font-size:13.5px;color:var(--muted);line-height:1.55}
 
-.opener{margin-top:22px;background:linear-gradient(135deg,rgba(124,167,63,.07),rgba(137,182,71,.03));border:1px solid rgba(124,167,63,.18);border-radius:var(--r);padding:20px 22px}
-.opener-lbl{font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gl);margin-bottom:10px}
-.opener-text{font-size:15px;color:var(--muted);line-height:1.7;font-style:italic}
+.opener{margin-top:24px;background:linear-gradient(135deg,rgba(124,167,63,.08),rgba(137,182,71,.03));border:1px solid rgba(124,167,63,.2);border-radius:var(--r);padding:22px 24px}
+.opener-lbl{font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gl);margin-bottom:11px}
+.opener-text{font-size:15px;color:var(--muted);line-height:1.75;font-style:italic}
 
-.actions{display:flex;gap:10px;justify-content:center;margin-top:32px;flex-wrap:wrap}
-.act-btn{padding:11px 24px;border-radius:999px;font-family:var(--fn);font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;transition:background .12s,border-color .12s,color .12s}
-.act-primary{background:var(--g);color:#fff;border:none}
-.act-primary:hover{background:var(--gl)}
+.actions{display:flex;gap:10px;justify-content:center;margin-top:36px;flex-wrap:wrap}
+.act-btn{padding:12px 26px;border-radius:999px;font-family:var(--fn);font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:background .12s,border-color .12s,color .12s;display:flex;align-items:center;gap:8px}
+.act-primary{background:var(--g);color:#fff;border:1px solid var(--g)}
+.act-primary:hover{background:var(--gl);border-color:var(--gl)}
 .act-ghost{background:none;border:1px solid var(--bd);color:var(--muted)}
 .act-ghost:hover{border-color:var(--g);color:var(--gl)}
+.act-btn:disabled{opacity:.45;cursor:not-allowed}
 
-footer{text-align:center;font-size:10.5px;color:var(--koud);padding:18px;border-top:1px solid var(--line);letter-spacing:.06em;text-transform:uppercase;margin-top:auto}
+footer{text-align:center;font-size:10.5px;color:var(--koud);padding:20px;border-top:1px solid var(--line);letter-spacing:.06em;text-transform:uppercase;margin-top:auto}
 
-@media print{
-  .top,.modal-bg,.actions,.key-btn{display:none!important}
-  .results{padding-top:0}
-  body{background:#fff;color:#000}
-  .dim-row{border-color:#ddd;break-inside:avoid}
-  .dbody{display:block!important}
+/* PDF ELEMENT — hidden, rendered off-screen by html2pdf */
+#pdf-output{
+  position:absolute;left:-9999px;top:0;
+  width:794px;background:#0c0c0c;
+  font-family:"Raleway",system-ui,sans-serif;
+  color:#ffffff;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
 }
 </style>
 </head>
@@ -151,17 +152,11 @@ footer{text-align:center;font-size:10.5px;color:var(--koud);padding:18px;border-
       <div class="modal-brand">Spring Real Estate</div>
     </div>
     <h2>Groq API-sleutel instellen</h2>
-    <p>
-      Om websites te scannen heb je een gratis Groq API-sleutel nodig.
-      Maak er een aan op <a class="modal-link" href="https://console.groq.com" target="_blank">console.groq.com</a>
-      &rarr; API Keys &rarr; Create API key.
-    </p>
-    <div class="modal-field">
-      <label class="modal-lbl" for="apiKeyInput">Groq API-sleutel</label>
-      <input class="modal-input" id="apiKeyInput" type="password" placeholder="gsk_..." autocomplete="off" spellcheck="false"/>
-    </div>
+    <p>Om websites te scannen heb je een gratis Groq API-sleutel nodig. Maak er een aan op <a class="modal-link" href="https://console.groq.com" target="_blank">console.groq.com</a> &rarr; API Keys &rarr; Create API key.</p>
+    <label class="modal-lbl" for="apiKeyInput">Groq API-sleutel</label>
+    <input class="modal-input" id="apiKeyInput" type="password" placeholder="gsk_..." autocomplete="off" spellcheck="false"/>
     <button class="modal-btn" onclick="saveKey()">Opslaan &amp; doorgaan</button>
-    <div class="modal-note">De sleutel wordt lokaal opgeslagen in je browser &mdash; niet gedeeld.</div>
+    <div class="modal-note">Sleutel wordt alleen lokaal opgeslagen in jouw browser.</div>
   </div>
 </div>
 
@@ -175,7 +170,7 @@ footer{text-align:center;font-size:10.5px;color:var(--koud);padding:18px;border-
   </div>
   <div class="top-right">
     <div class="top-score" id="topScore"></div>
-    <button class="key-btn" onclick="resetKey()" title="API-sleutel wijzigen">&#9881; Sleutel</button>
+    <button class="key-btn" onclick="resetKey()">&#9881; Sleutel</button>
   </div>
 </div>
 
@@ -196,20 +191,14 @@ footer{text-align:center;font-size:10.5px;color:var(--koud);padding:18px;border-
       </div>
       <input class="url-in" id="urlIn" type="text" placeholder="https://projectwebsite.nl" autocomplete="off" spellcheck="false"/>
       <button class="scan-btn" id="scanBtn" onclick="doScan()">
-        <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
-          <path d="M2 12L12 2M12 2H6M12 2v6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H6M12 2v6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Scan
       </button>
     </div>
-
     <div class="status-bar" id="statusBar">
       <div class="st-lbl" id="stLbl">Aan het scannen</div>
       <div class="st-url" id="stUrl"></div>
-      <div class="st-row" id="stRow">
-        <div class="dot"></div>
-        <span id="stMsg">Website ophalen&hellip;</span>
-      </div>
+      <div class="st-row"><div class="dot"></div><span id="stMsg">Website ophalen…</span></div>
     </div>
   </div>
 
@@ -230,6 +219,9 @@ footer{text-align:center;font-size:10.5px;color:var(--koud);padding:18px;border-
 <!-- RESULTS -->
 <div class="results" id="resultsSection"></div>
 
+<!-- PDF OUTPUT (hidden, used by html2pdf) -->
+<div id="pdf-output"></div>
+
 <footer>Spring Real Estate &nbsp;&middot;&nbsp; Projectmarketing &amp; Makelaardij</footer>
 
 <script>
@@ -237,201 +229,269 @@ var KEY_STORE = 'spring_groq_key';
 var PROXY     = 'https://corsproxy.io/?';
 var GROQ_URL  = 'https://api.groq.com/openai/v1/chat/completions';
 var MODEL     = 'llama-3.3-70b-versatile';
+var _scanData = null;
 
-// ── Init ──────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', function() {
   if (!localStorage.getItem(KEY_STORE)) showSetup();
   document.getElementById('urlIn').addEventListener('keydown', function(e){ if(e.key==='Enter') doScan(); });
 });
 
-// ── API key setup ─────────────────────────────────────────────────
-function showSetup() { document.getElementById('setupModal').style.display = 'flex'; }
-function resetKey()  { document.getElementById('apiKeyInput').value = ''; showSetup(); }
-function saveKey() {
-  var k = document.getElementById('apiKeyInput').value.trim();
-  if (!k) { alert('Voer een API-sleutel in.'); return; }
-  localStorage.setItem(KEY_STORE, k);
-  document.getElementById('setupModal').style.display = 'none';
+function showSetup(){ document.getElementById('setupModal').style.display='flex'; }
+function resetKey(){ document.getElementById('apiKeyInput').value=''; showSetup(); }
+function saveKey(){
+  var k=document.getElementById('apiKeyInput').value.trim();
+  if(!k){ alert('Voer een API-sleutel in.'); return; }
+  localStorage.setItem(KEY_STORE,k);
+  document.getElementById('setupModal').style.display='none';
 }
 
-// ── Helpers ───────────────────────────────────────────────────────
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function pct(score,max){ return max > 0 ? score/max : 0; }
 function clr(p){ return p>=.7?'good':p>=.45?'mid':'low'; }
-function barClr(p){ return p>=.7?'var(--gl)':p>=.45?'#d4a832':'var(--rood)'; }
-function setMsg(txt){ document.getElementById('stMsg').textContent = txt; }
+function barClr(p){ return p>=.7?'#89B647':p>=.45?'#d4a832':'#d9713e'; }
 
-// ── Scan ──────────────────────────────────────────────────────────
-async function doScan() {
-  var apiKey = localStorage.getItem(KEY_STORE);
-  if (!apiKey) { showSetup(); return; }
+async function doScan(){
+  var apiKey=localStorage.getItem(KEY_STORE);
+  if(!apiKey){ showSetup(); return; }
+  var raw=document.getElementById('urlIn').value.trim();
+  if(!raw){ document.getElementById('urlIn').focus(); return; }
+  var url=/^https?:\/\//i.test(raw)?raw:'https://'+raw;
 
-  var raw = document.getElementById('urlIn').value.trim();
-  if (!raw) { document.getElementById('urlIn').focus(); return; }
-  var url = /^https?:\/\//i.test(raw) ? raw : 'https://' + raw;
+  document.getElementById('scanBtn').disabled=true;
+  document.getElementById('urlIn').disabled=true;
+  document.getElementById('eyebrow').style.display='none';
+  document.getElementById('heroTitle').style.display='none';
+  document.getElementById('heroSub').style.display='none';
+  document.getElementById('dimPills').style.display='none';
+  document.getElementById('resultsSection').style.display='none';
+  document.getElementById('hero').style.paddingTop='28px';
+  document.getElementById('hero').style.paddingBottom='28px';
 
-  // UI: scanning state
-  document.getElementById('scanBtn').disabled = true;
-  document.getElementById('urlIn').disabled   = true;
-  document.getElementById('eyebrow').style.display  = 'none';
-  document.getElementById('heroTitle').style.display = 'none';
-  document.getElementById('heroSub').style.display  = 'none';
-  document.getElementById('dimPills').style.display = 'none';
-  document.getElementById('resultsSection').style.display = 'none';
-  document.getElementById('hero').style.paddingTop = '28px';
-  document.getElementById('hero').style.paddingBottom = '28px';
-
-  var bar = document.getElementById('statusBar');
+  var bar=document.getElementById('statusBar');
   bar.classList.add('show');
-  document.getElementById('stLbl').textContent = 'Aan het scannen';
-  document.getElementById('stLbl').style.color = '';
-  document.getElementById('stUrl').textContent = url;
-  document.getElementById('stRow').innerHTML = '<div class="dot"></div><span id="stMsg">Website ophalen…</span>';
+  document.getElementById('stLbl').textContent='Aan het scannen';
+  document.getElementById('stLbl').style.color='';
+  document.getElementById('stUrl').textContent=url;
+  document.getElementById('stRow').innerHTML='<div class="dot"></div><span id="stMsg">Website ophalen…</span>';
 
-  try {
-    // 1. Fetch page via CORS proxy
-    var pageText = '';
-    try {
-      setMsg('Website ophalen…');
-      var proxyResp = await fetch(PROXY + encodeURIComponent(url), { signal: AbortSignal.timeout(15000) });
-      if (proxyResp.ok) {
-        var html = await proxyResp.text();
-        pageText = html
-          .replace(/<script[\s\S]*?<\/script>/gi, '')
-          .replace(/<style[\s\S]*?<\/style>/gi, '')
-          .replace(/<[^>]+>/g, ' ')
-          .replace(/\s+/g, ' ')
-          .trim()
-          .slice(0, 40000);
+  try{
+    var pageText='';
+    try{
+      document.getElementById('stMsg').textContent='Website ophalen…';
+      var pr=await fetch(PROXY+encodeURIComponent(url),{signal:AbortSignal.timeout(15000)});
+      if(pr.ok){
+        var html=await pr.text();
+        pageText=html.replace(/<script[\s\S]*?<\/script>/gi,'').replace(/<style[\s\S]*?<\/style>/gi,'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().slice(0,40000);
       }
-    } catch(e) {
-      pageText = '[Pagina kon niet worden geladen via proxy. Analyseer op basis van URL en domeinnaam.]';
-    }
+    }catch(e){ pageText='[Pagina niet bereikbaar via proxy. Analyseer op URL en domeinnaam.]'; }
 
-    // 2. Groq analyse
-    setMsg('CRO-analyse uitvoeren…');
-    var groqResp = await fetch(GROQ_URL, {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Bearer ' + apiKey,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        model: MODEL,
-        messages: [
-          { role: 'system', content: 'Je bent een CRO-expert voor Nederlandse nieuwbouw projectwebsites. Antwoord altijd in valide JSON, zonder extra tekst.' },
-          { role: 'user',   content: buildPrompt(url, pageText) }
+    document.getElementById('stMsg').textContent='AI-analyse uitvoeren…';
+    var gr=await fetch(GROQ_URL,{
+      method:'POST',
+      headers:{'Authorization':'Bearer '+apiKey,'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:MODEL,
+        messages:[
+          {role:'system',content:'Je bent een CRO-expert voor Nederlandse nieuwbouw projectwebsites. Antwoord altijd in valide JSON, zonder extra tekst.'},
+          {role:'user',content:buildPrompt(url,pageText)}
         ],
-        response_format: { type: 'json_object' },
-        max_tokens: 2000,
-        temperature: 0.2
+        response_format:{type:'json_object'},
+        max_tokens:2000,
+        temperature:0.2
       }),
-      signal: AbortSignal.timeout(60000)
+      signal:AbortSignal.timeout(60000)
     });
 
-    if (!groqResp.ok) {
-      var errData = await groqResp.json().catch(function(){ return {}; });
-      throw new Error(errData.error && errData.error.message ? errData.error.message : 'Groq API fout (' + groqResp.status + ')');
+    if(!gr.ok){
+      var ed=await gr.json().catch(function(){return{};});
+      throw new Error(ed.error&&ed.error.message?ed.error.message:'Groq API fout ('+gr.status+')');
     }
-
-    var groqData = await groqResp.json();
-    var result = JSON.parse(groqData.choices[0].message.content);
-    result.url = url;
-
-    // Reset UI and render
+    var gd=await gr.json();
+    var result=JSON.parse(gd.choices[0].message.content);
+    result.url=url;
+    _scanData=result;
     bar.classList.remove('show');
     renderResults(result);
-
-  } catch(e) {
-    document.getElementById('stLbl').textContent = 'Fout';
-    document.getElementById('stLbl').style.color = 'var(--rood)';
-    document.getElementById('stRow').innerHTML = '<span class="st-err">' + esc(e.message) + '</span>';
-    document.getElementById('scanBtn').disabled = false;
-    document.getElementById('urlIn').disabled   = false;
+  }catch(e){
+    document.getElementById('stLbl').textContent='Fout';
+    document.getElementById('stLbl').style.color='var(--rood)';
+    document.getElementById('stRow').innerHTML='<span class="st-err">'+esc(e.message)+'</span>';
+    document.getElementById('scanBtn').disabled=false;
+    document.getElementById('urlIn').disabled=false;
   }
 }
 
-// ── Prompt ────────────────────────────────────────────────────────
-function buildPrompt(url, text) {
-  return 'Analyseer deze nieuwbouw projectwebsite voor CRO.\n\nURL: ' + url + '\n\nPAGINA-INHOUD:\n' + text + '\n\nGeef ALLEEN valide JSON terug in dit formaat:\n{\n  "total": <som scores>,\n  "dimensions": [\n    {"name": "Hero & waardepropositie", "score": <0-10>, "max": 10, "feedback": ["punt1", "punt2"]},\n    {"name": "Conversie & CTA\'s", "score": <0-20>, "max": 20, "feedback": ["punt1", "punt2"]},\n    {"name": "Aanbod & beschikbaarheid", "score": <0-15>, "max": 15, "feedback": ["punt1", "punt2"]},\n    {"name": "Plattegronden", "score": <0-10>, "max": 10, "feedback": ["punt1", "punt2"]},\n    {"name": "Omgeving & storytelling", "score": <0-10>, "max": 10, "feedback": ["punt1", "punt2"]},\n    {"name": "Duurzaamheid & kwaliteit", "score": <0-5>, "max": 5, "feedback": ["punt1", "punt2"]},\n    {"name": "Vertrouwen & bewijs", "score": <0-5>, "max": 5, "feedback": ["punt1", "punt2"]},\n    {"name": "Communicatiescan", "score": <0-10>, "max": 10, "feedback": ["punt1", "punt2"]},\n    {"name": "Beeld & beleving", "score": <0-5>, "max": 5, "feedback": ["punt1", "punt2"]},\n    {"name": "Techniek & marketing", "score": <0-10>, "max": 10, "feedback": ["punt1", "punt2"]}\n  ],\n  "opener": "Gespreksopener voor de klant, 2-3 zinnen in het Nederlands"\n}\n\nWees kritisch en concreet. Verbeterpunten in het Nederlands.';
+function buildPrompt(url,text){
+  return 'Analyseer deze nieuwbouw projectwebsite voor CRO.\n\nURL: '+url+'\n\nPAGINA-INHOUD:\n'+text+'\n\nGeef ALLEEN valide JSON:\n{"total":<0-100>,"dimensions":[{"name":"Hero & waardepropositie","score":<0-10>,"max":10,"feedback":["punt1","punt2"]},{"name":"Conversie & CTA\'s","score":<0-20>,"max":20,"feedback":["punt1","punt2"]},{"name":"Aanbod & beschikbaarheid","score":<0-15>,"max":15,"feedback":["punt1","punt2"]},{"name":"Plattegronden","score":<0-10>,"max":10,"feedback":["punt1","punt2"]},{"name":"Omgeving & storytelling","score":<0-10>,"max":10,"feedback":["punt1","punt2"]},{"name":"Duurzaamheid & kwaliteit","score":<0-5>,"max":5,"feedback":["punt1","punt2"]},{"name":"Vertrouwen & bewijs","score":<0-5>,"max":5,"feedback":["punt1","punt2"]},{"name":"Communicatiescan","score":<0-10>,"max":10,"feedback":["punt1","punt2"]},{"name":"Beeld & beleving","score":<0-5>,"max":5,"feedback":["punt1","punt2"]},{"name":"Techniek & marketing","score":<0-10>,"max":10,"feedback":["punt1","punt2"]}],"opener":"gespreksopener 2-3 zinnen Nederlands"}\n\nWees kritisch en concreet. Verbeterpunten in het Nederlands.';
 }
 
-// ── Render results ────────────────────────────────────────────────
-function renderResults(d) {
-  var totalPct = d.total / 100;
-  var tc = clr(totalPct);
-  var vt = totalPct >= .7 ? 'Sterke basis' : totalPct >= .45 ? 'Verbeterpotentieel' : 'Urgent bijwerken';
+function renderResults(d){
+  var tp=d.total/100;
+  var tc=clr(tp);
+  var vt=tp>=.7?'Sterke basis':tp>=.45?'Verbeterpotentieel':'Urgent bijwerken';
 
-  // Top score pill
-  var ts = document.getElementById('topScore');
-  ts.textContent = d.total + ' / 100';
-  ts.className = 'top-score bg-' + tc;
-  ts.style.display = 'inline-block';
+  var ts=document.getElementById('topScore');
+  ts.textContent=d.total+' / 100';
+  ts.className='top-score bg-'+tc;
+  ts.style.display='inline-block';
 
-  var dims = (d.dimensions || []).map(function(dim, i) {
-    var dp = pct(dim.score, dim.max);
-    var dc = clr(dp);
-    var bw = Math.round(dp * 100);
-    var num = i < 9 ? '0' + (i + 1) : '' + (i + 1);
-    var fb = (dim.feedback || []).map(function(f) {
-      return '<div class="fb-item"><div class="fb-dot"></div><div class="fb-text">' + esc(f) + '</div></div>';
+  var dims=(d.dimensions||[]).map(function(dim,i){
+    var dp=dim.score/dim.max;
+    var dc=clr(dp);
+    var bw=Math.round(dp*100);
+    var num=i<9?'0'+(i+1):''+(i+1);
+    var fb=(dim.feedback||[]).map(function(f){
+      return '<div class="fb-item"><div class="fb-dot"></div><div class="fb-text">'+esc(f)+'</div></div>';
     }).join('');
     return '<div class="dim-row">'
-      + '<div class="dim-head" onclick="tog(this)">'
-      + '<span class="dnb">' + num + '</span>'
-      + '<span class="dtitle">' + esc(dim.name) + '</span>'
-      + '<span class="dscore"><span class="dscore-val ' + dc + '">' + dim.score + '</span><span class="dscore-max"> / ' + dim.max + '</span></span>'
-      + '<svg class="chev" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-      + '</div>'
-      + '<div class="dbar"><div class="dbar-fill" style="width:' + bw + '%;background:' + barClr(dp) + '"></div></div>'
-      + '<div class="dbody">' + (fb ? '<div class="fb-lbl">Verbeterpunten</div>' + fb : '') + '</div>'
-      + '</div>';
+      +'<div class="dim-head" onclick="tog(this)">'
+      +'<span class="dnb">'+num+'</span>'
+      +'<span class="dtitle">'+esc(dim.name)+'</span>'
+      +'<span class="dscore"><span class="dscore-val '+dc+'">'+dim.score+'</span><span class="dscore-max"> / '+dim.max+'</span></span>'
+      +'<svg class="chev" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      +'</div>'
+      +'<div class="dbar"><div class="dbar-fill" style="width:'+bw+'%;background:'+barClr(dp)+'"></div></div>'
+      +'<div class="dbody">'+(fb?'<div class="fb-lbl">Verbeterpunten</div>'+fb:'')+'</div>'
+      +'</div>';
   }).join('');
 
-  var opener = d.opener
-    ? '<div class="opener"><div class="opener-lbl">Gespreksopener voor de klant</div><div class="opener-text">' + esc(d.opener) + '</div></div>'
-    : '';
+  var opener=d.opener
+    ?'<div class="opener"><div class="opener-lbl">Gespreksopener voor de klant</div><div class="opener-text">'+esc(d.opener)+'</div></div>'
+    :'';
 
-  document.getElementById('resultsSection').innerHTML =
+  document.getElementById('resultsSection').innerHTML=
     '<div class="res-head">'
-    + '<div class="res-domain"><a href="' + esc(d.url) + '" target="_blank" rel="noopener">' + esc(d.url) + '</a></div>'
-    + '<div class="score-wrap">'
-    + '<span class="score-num ' + tc + '">' + d.total + '</span>'
-    + '<span class="score-sub">/ 100</span>'
-    + '<span class="verdict bg-' + tc + '">' + vt + '</span>'
-    + '</div></div>'
-    + dims
-    + opener
-    + '<div class="actions">'
-    + '<button class="act-btn act-primary" onclick="window.print()">&#128438; Rapport afdrukken</button>'
-    + '<button class="act-btn act-ghost" onclick="newScan()">+ Nieuwe scan</button>'
-    + '</div>';
+    +'<div class="res-domain"><a href="'+esc(d.url)+'" target="_blank" rel="noopener">'+esc(d.url)+'</a></div>'
+    +'<div class="score-wrap">'
+    +'<span class="score-num '+tc+'">'+d.total+'</span>'
+    +'<span class="score-sub">/ 100</span>'
+    +'<span class="verdict bg-'+tc+'">'+vt+'</span>'
+    +'</div></div>'
+    +dims+opener
+    +'<div class="actions">'
+    +'<button class="act-btn act-primary" id="dlBtn" onclick="downloadPdf()">&#8595; Download PDF</button>'
+    +'<button class="act-btn act-ghost" onclick="newScan()">+ Nieuwe scan</button>'
+    +'</div>';
 
-  document.getElementById('resultsSection').style.display = 'block';
+  document.getElementById('resultsSection').style.display='block';
 }
 
-function tog(head) {
-  var body = head.parentElement.querySelector('.dbody');
-  var ch   = head.querySelector('.chev');
-  var open = body.classList.contains('open');
-  body.classList.toggle('open', !open);
-  ch.classList.toggle('open', !open);
+function tog(head){
+  var body=head.parentElement.querySelector('.dbody');
+  var ch=head.querySelector('.chev');
+  var open=body.classList.contains('open');
+  body.classList.toggle('open',!open);
+  ch.classList.toggle('open',!open);
 }
 
-function newScan() {
-  document.getElementById('scanBtn').disabled  = false;
-  document.getElementById('urlIn').disabled   = false;
-  document.getElementById('urlIn').value      = '';
+function newScan(){
+  _scanData=null;
+  document.getElementById('scanBtn').disabled=false;
+  document.getElementById('urlIn').disabled=false;
+  document.getElementById('urlIn').value='';
   document.getElementById('statusBar').classList.remove('show');
-  document.getElementById('resultsSection').style.display = 'none';
-  document.getElementById('eyebrow').style.display  = '';
-  document.getElementById('heroTitle').style.display = '';
-  document.getElementById('heroSub').style.display  = '';
-  document.getElementById('dimPills').style.display = '';
-  document.getElementById('hero').style.paddingTop    = '';
-  document.getElementById('hero').style.paddingBottom = '';
-  document.getElementById('topScore').style.display = 'none';
+  document.getElementById('resultsSection').style.display='none';
+  document.getElementById('eyebrow').style.display='';
+  document.getElementById('heroTitle').style.display='';
+  document.getElementById('heroSub').style.display='';
+  document.getElementById('dimPills').style.display='';
+  document.getElementById('hero').style.paddingTop='';
+  document.getElementById('hero').style.paddingBottom='';
+  document.getElementById('topScore').style.display='none';
   document.getElementById('urlIn').focus();
+}
+
+/* ── PDF GENERATION ─────────────────────────────────────────── */
+function downloadPdf(){
+  if(!_scanData) return;
+  var d=_scanData;
+  var btn=document.getElementById('dlBtn');
+  btn.disabled=true;
+  btn.textContent='PDF wordt gemaakt…';
+
+  var tp=d.total/100;
+  var tc=tp>=.7?'#89B647':tp>=.45?'#d4a832':'#d9713e';
+  var vt=tp>=.7?'Sterke basis':tp>=.45?'Verbeterpotentieel':'Urgent bijwerken';
+  var vtBg=tp>=.7?'rgba(137,182,71,.12)':tp>=.45?'rgba(212,168,50,.12)':'rgba(217,113,62,.12)';
+  var vtBd=tp>=.7?'rgba(137,182,71,.3)':tp>=.45?'rgba(212,168,50,.3)':'rgba(217,113,62,.3)';
+
+  var now=new Date();
+  var dateStr=now.getDate()+' '+'januari februari maart april mei juni juli augustus september oktober november december'.split(' ')[now.getMonth()]+' '+now.getFullYear();
+
+  var dimsHtml=(d.dimensions||[]).map(function(dim,i){
+    var dp=dim.score/dim.max;
+    var dc=dp>=.7?'#89B647':dp>=.45?'#d4a832':'#d9713e';
+    var bw=Math.round(dp*100);
+    var num=i<9?'0'+(i+1):''+(i+1);
+    var fb=(dim.feedback||[]).map(function(f){
+      return '<div style="display:flex;gap:10px;padding:9px 13px;background:#0c0c0c;border:1px solid #2f2f2d;border-radius:7px;margin-bottom:6px;">'
+        +'<div style="width:5px;height:5px;border-radius:50%;background:#7CA73F;flex-shrink:0;margin-top:8px;"></div>'
+        +'<div style="font-size:12.5px;color:#AFAEB2;line-height:1.5;">'+esc(f)+'</div>'
+        +'</div>';
+    }).join('');
+    return '<div style="background:#161615;border:1px solid #2f2f2d;border-radius:11px;overflow:hidden;margin-bottom:8px;">'
+      +'<div style="display:flex;align-items:center;gap:12px;padding:13px 16px;">'
+      +'<span style="font-size:9px;font-weight:800;letter-spacing:.07em;color:#89B647;background:rgba(137,182,71,.1);padding:3px 8px;border-radius:999px;flex-shrink:0;">'+num+'</span>'
+      +'<span style="font-size:13.5px;font-weight:700;flex:1;color:#fff;">'+esc(dim.name)+'</span>'
+      +'<span style="font-size:18px;font-weight:800;color:'+dc+';">'+dim.score+'</span>'
+      +'<span style="font-size:10.5px;color:#AFAEB2;"> / '+dim.max+'</span>'
+      +'</div>'
+      +'<div style="height:3px;background:#3C3C3B;margin:0 16px;">'
+      +'<div style="height:100%;border-radius:999px;background:'+dc+';width:'+bw+'%;"></div>'
+      +'</div>'
+      +(fb?'<div style="padding:0 16px 14px;">'
+        +'<div style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#8a8a8c;margin:12px 0 8px;">Verbeterpunten</div>'
+        +fb+'</div>':'')
+      +'</div>';
+  }).join('');
+
+  var openerHtml=d.opener
+    ?'<div style="margin-top:20px;background:linear-gradient(135deg,rgba(124,167,63,.08),rgba(137,182,71,.03));border:1px solid rgba(124,167,63,.2);border-radius:11px;padding:20px 22px;">'
+      +'<div style="font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#89B647;margin-bottom:10px;">Gespreksopener voor de klant</div>'
+      +'<div style="font-size:14px;color:#AFAEB2;line-height:1.7;font-style:italic;">'+esc(d.opener)+'</div>'
+      +'</div>'
+    :'';
+
+  var domain=d.url.replace(/^https?:\/\//,'').split('/')[0];
+
+  document.getElementById('pdf-output').innerHTML=
+    '<div style="padding:40px;background:#0c0c0c;font-family:Raleway,system-ui,sans-serif;">'
+    // Header
+    +'<div style="display:flex;align-items:center;gap:14px;padding-bottom:24px;border-bottom:1px solid #3C3C3B;margin-bottom:32px;">'
+    +'<div style="width:36px;height:36px;background:#7CA73F;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;color:#fff;flex-shrink:0;">S</div>'
+    +'<div>'
+    +'<div style="font-weight:800;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#7CA73F;">Spring Real Estate</div>'
+    +'<div style="font-size:9px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#AFAEB2;margin-top:2px;">CRO-scan Rapport &middot; Projectwebsites</div>'
+    +'</div>'
+    +'<div style="margin-left:auto;font-size:11px;color:#8a8a8c;">'+dateStr+'</div>'
+    +'</div>'
+    // Score header
+    +'<div style="text-align:center;margin-bottom:36px;">'
+    +'<div style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#AFAEB2;margin-bottom:14px;">'+esc(d.url)+'</div>'
+    +'<div style="font-size:80px;font-weight:800;letter-spacing:-.04em;line-height:1;color:'+tc+';">'+d.total+'</div>'
+    +'<div style="font-size:15px;color:#AFAEB2;font-weight:600;margin-top:4px;">/ 100</div>'
+    +'<div style="display:inline-block;margin-top:12px;padding:6px 18px;border-radius:999px;font-size:10.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;background:'+vtBg+';border:1px solid '+vtBd+';color:'+tc+';">'+vt+'</div>'
+    +'</div>'
+    // Dimensions
+    +dimsHtml
+    // Opener
+    +openerHtml
+    // Footer
+    +'<div style="margin-top:36px;padding-top:20px;border-top:1px solid #3C3C3B;text-align:center;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:#8a8a8c;">'
+    +'Spring Real Estate &nbsp;&middot;&nbsp; Projectmarketing &amp; Makelaardij'
+    +'</div>'
+    +'</div>';
+
+  var el=document.getElementById('pdf-output');
+  html2pdf().set({
+    margin:0,
+    filename:'CRO-scan-'+domain+'.pdf',
+    image:{type:'jpeg',quality:0.95},
+    html2canvas:{scale:2,useCORS:true,backgroundColor:'#0c0c0c'},
+    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
+  }).from(el).save().then(function(){
+    btn.disabled=false;
+    btn.innerHTML='&#8595; Download PDF';
+  });
 }
 </script>
 </body>
