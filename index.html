@@ -274,31 +274,6 @@ async function doScan(){
   document.getElementById('stRow').innerHTML='<div class="dot"></div><span id="stMsg">Website ophalen…</span>';
 
   try{
-    var pageText='';
-    try{
-      document.getElementById('stMsg').textContent='Website ophalen…';
-      function timedFetch(proxyBase,target,ms){
-        var ctrl=new AbortController();
-        var timer=setTimeout(function(){ctrl.abort();},ms);
-        return fetch(proxyBase+encodeURIComponent(target),{signal:ctrl.signal})
-          .then(function(r){ if(!r.ok) throw new Error('bad'); return r.text(); })
-          .then(function(t){ clearTimeout(timer); return t; })
-          .catch(function(e){ clearTimeout(timer); throw e; });
-      }
-      /* Hard outer deadline — no matter what the proxies do, we move on after 4s */
-      var hardDeadline=new Promise(function(res){ setTimeout(function(){ res(null); },4000); });
-      var raceResult=await Promise.race([
-        Promise.any([
-          timedFetch('https://corsproxy.io/?',url,3500),
-          timedFetch('https://api.allorigins.win/raw?url=',url,3500)
-        ]).catch(function(){ return null; }),
-        hardDeadline
-      ]);
-      if(raceResult){
-        pageText=raceResult.replace(/<script[\s\S]*?<\/script>/gi,'').replace(/<style[\s\S]*?<\/style>/gi,'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().slice(0,15000);
-      }
-    }catch(e){ /* proceed without page text */ }
-
     document.getElementById('stMsg').textContent='AI-analyse uitvoeren…';
     var groqCtrl=new AbortController();
     var groqTimer=setTimeout(function(){groqCtrl.abort();},20000);
@@ -309,7 +284,7 @@ async function doScan(){
         model:MODEL,
         messages:[
           {role:'system',content:'Je bent een CRO-expert voor Nederlandse nieuwbouw projectwebsites. Antwoord altijd in valide JSON, zonder extra tekst.'},
-          {role:'user',content:buildPrompt(url,pageText)}
+          {role:'user',content:buildPrompt(url,'')}
         ],
         response_format:{type:'json_object'},
         max_tokens:1000,
@@ -338,8 +313,8 @@ async function doScan(){
   }
 }
 
-function buildPrompt(url,text){
-  return 'Analyseer deze nieuwbouw projectwebsite voor CRO.\n\nURL: '+url+'\n\nPAGINA-INHOUD:\n'+text+'\n\nGeef ALLEEN valide JSON:\n{"total":<0-100>,"dimensions":[{"name":"Hero & waardepropositie","score":<0-10>,"max":10,"feedback":["punt1","punt2"]},{"name":"Conversie & CTA\'s","score":<0-20>,"max":20,"feedback":["punt1","punt2"]},{"name":"Aanbod & beschikbaarheid","score":<0-15>,"max":15,"feedback":["punt1","punt2"]},{"name":"Plattegronden","score":<0-10>,"max":10,"feedback":["punt1","punt2"]},{"name":"Omgeving & storytelling","score":<0-10>,"max":10,"feedback":["punt1","punt2"]},{"name":"Duurzaamheid & kwaliteit","score":<0-5>,"max":5,"feedback":["punt1","punt2"]},{"name":"Vertrouwen & bewijs","score":<0-5>,"max":5,"feedback":["punt1","punt2"]},{"name":"Communicatiescan","score":<0-10>,"max":10,"feedback":["punt1","punt2"]},{"name":"Beeld & beleving","score":<0-5>,"max":5,"feedback":["punt1","punt2"]},{"name":"Techniek & marketing","score":<0-10>,"max":10,"feedback":["punt1","punt2"]}],"opener":"gespreksopener 2-3 zinnen Nederlands"}\n\nWees kritisch en concreet. Verbeterpunten in het Nederlands.';
+function buildPrompt(url){
+  return 'Je bent een CRO-expert die Nederlandse nieuwbouw projectwebsites beoordeelt. Analyseer de onderstaande URL op basis van je kennis van de site, het domein en gangbare nieuwbouw projectwebsites.\n\nURL: '+url+'\n\nBeoordeel op 10 dimensies. Wees kritisch en realistisch — de meeste sites scoren 40-65. Geef concrete, uitvoerbare verbeterpunten in het Nederlands.\n\nGeef ALLEEN deze JSON (geen andere tekst):\n{"total":<0-100>,"dimensions":[{"name":"Hero & waardepropositie","score":<0-10>,"max":10,"feedback":["concreet punt","concreet punt"]},{"name":"Conversie & CTA\'s","score":<0-20>,"max":20,"feedback":["concreet punt","concreet punt"]},{"name":"Aanbod & beschikbaarheid","score":<0-15>,"max":15,"feedback":["concreet punt","concreet punt"]},{"name":"Plattegronden","score":<0-10>,"max":10,"feedback":["concreet punt","concreet punt"]},{"name":"Omgeving & storytelling","score":<0-10>,"max":10,"feedback":["concreet punt","concreet punt"]},{"name":"Duurzaamheid & kwaliteit","score":<0-5>,"max":5,"feedback":["concreet punt","concreet punt"]},{"name":"Vertrouwen & bewijs","score":<0-5>,"max":5,"feedback":["concreet punt","concreet punt"]},{"name":"Communicatiescan","score":<0-10>,"max":10,"feedback":["concreet punt","concreet punt"]},{"name":"Beeld & beleving","score":<0-5>,"max":5,"feedback":["concreet punt","concreet punt"]},{"name":"Techniek & marketing","score":<0-10>,"max":10,"feedback":["concreet punt","concreet punt"]}],"opener":"gespreksopener van 2-3 zinnen voor een makelaar om mee het gesprek aan te gaan"}';
 }
 
 function renderResults(d){
