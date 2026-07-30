@@ -277,11 +277,18 @@ async function doScan(){
     var pageText='';
     try{
       document.getElementById('stMsg').textContent='Website ophalen…';
-      var PROXIES=['https://corsproxy.io/?','https://api.allorigins.win/raw?url='];
-      var html=await Promise.any(PROXIES.map(function(p){
-        return fetch(p+encodeURIComponent(url),{signal:AbortSignal.timeout(5000)})
-          .then(function(r){ if(!r.ok) throw new Error('bad'); return r.text(); });
-      }));
+      function timedFetch(proxyBase,target,ms){
+        var ctrl=new AbortController();
+        var timer=setTimeout(function(){ctrl.abort();},ms);
+        return fetch(proxyBase+encodeURIComponent(target),{signal:ctrl.signal})
+          .then(function(r){ if(!r.ok) throw new Error('bad'); return r.text(); })
+          .then(function(t){ clearTimeout(timer); return t; })
+          .catch(function(e){ clearTimeout(timer); throw e; });
+      }
+      var html=await Promise.any([
+        timedFetch('https://corsproxy.io/?',url,4000),
+        timedFetch('https://api.allorigins.win/raw?url=',url,4000)
+      ]);
       pageText=html.replace(/<script[\s\S]*?<\/script>/gi,'').replace(/<style[\s\S]*?<\/style>/gi,'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().slice(0,15000);
     }catch(e){ pageText='[Pagina niet bereikbaar via proxy. Analyseer op URL en domeinnaam.]'; }
 
