@@ -228,7 +228,7 @@ footer{text-align:center;font-size:10.5px;color:var(--koud);padding:20px;border-
 var KEY_STORE = 'spring_groq_key';
 var PROXY     = 'https://corsproxy.io/?';
 var GROQ_URL  = 'https://api.groq.com/openai/v1/chat/completions';
-var MODEL     = 'llama-3.3-70b-versatile';
+var MODEL     = 'llama-3.1-8b-instant';
 var _scanData = null;
 
 window.addEventListener('DOMContentLoaded', function() {
@@ -277,10 +277,10 @@ async function doScan(){
     var pageText='';
     try{
       document.getElementById('stMsg').textContent='Website ophalen…';
-      var pr=await fetch(PROXY+encodeURIComponent(url),{signal:AbortSignal.timeout(15000)});
+      var pr=await fetch(PROXY+encodeURIComponent(url),{signal:AbortSignal.timeout(8000)});
       if(pr.ok){
         var html=await pr.text();
-        pageText=html.replace(/<script[\s\S]*?<\/script>/gi,'').replace(/<style[\s\S]*?<\/style>/gi,'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().slice(0,40000);
+        pageText=html.replace(/<script[\s\S]*?<\/script>/gi,'').replace(/<style[\s\S]*?<\/style>/gi,'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().slice(0,15000);
       }
     }catch(e){ pageText='[Pagina niet bereikbaar via proxy. Analyseer op URL en domeinnaam.]'; }
 
@@ -295,10 +295,10 @@ async function doScan(){
           {role:'user',content:buildPrompt(url,pageText)}
         ],
         response_format:{type:'json_object'},
-        max_tokens:2000,
+        max_tokens:1200,
         temperature:0.2
       }),
-      signal:AbortSignal.timeout(60000)
+      signal:AbortSignal.timeout(25000)
     });
 
     if(!gr.ok){
