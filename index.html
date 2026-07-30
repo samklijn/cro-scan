@@ -285,14 +285,23 @@ async function doScan(){
           .then(function(t){ clearTimeout(timer); return t; })
           .catch(function(e){ clearTimeout(timer); throw e; });
       }
-      var html=await Promise.any([
-        timedFetch('https://corsproxy.io/?',url,4000),
-        timedFetch('https://api.allorigins.win/raw?url=',url,4000)
+      /* Hard outer deadline — no matter what the proxies do, we move on after 4s */
+      var hardDeadline=new Promise(function(res){ setTimeout(function(){ res(null); },4000); });
+      var raceResult=await Promise.race([
+        Promise.any([
+          timedFetch('https://corsproxy.io/?',url,3500),
+          timedFetch('https://api.allorigins.win/raw?url=',url,3500)
+        ]).catch(function(){ return null; }),
+        hardDeadline
       ]);
-      pageText=html.replace(/<script[\s\S]*?<\/script>/gi,'').replace(/<style[\s\S]*?<\/style>/gi,'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().slice(0,15000);
-    }catch(e){ pageText='[Pagina niet bereikbaar via proxy. Analyseer op URL en domeinnaam.]'; }
+      if(raceResult){
+        pageText=raceResult.replace(/<script[\s\S]*?<\/script>/gi,'').replace(/<style[\s\S]*?<\/style>/gi,'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().slice(0,15000);
+      }
+    }catch(e){ /* proceed without page text */ }
 
     document.getElementById('stMsg').textContent='AI-analyse uitvoeren…';
+    var groqCtrl=new AbortController();
+    var groqTimer=setTimeout(function(){groqCtrl.abort();},20000);
     var gr=await fetch(GROQ_URL,{
       method:'POST',
       headers:{'Authorization':'Bearer '+apiKey,'Content-Type':'application/json'},
@@ -303,11 +312,12 @@ async function doScan(){
           {role:'user',content:buildPrompt(url,pageText)}
         ],
         response_format:{type:'json_object'},
-        max_tokens:1200,
+        max_tokens:1000,
         temperature:0.2
       }),
-      signal:AbortSignal.timeout(25000)
+      signal:groqCtrl.signal
     });
+    clearTimeout(groqTimer);
 
     if(!gr.ok){
       var ed=await gr.json().catch(function(){return{};});
