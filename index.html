@@ -4,9 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CRO-scan · Spring Real Estate</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script>/* force fresh load when version changes */
+(function(){var v='v8';if(sessionStorage.getItem('cro-ver')!==v){sessionStorage.setItem('cro-ver',v);if(window.location.href.indexOf('nocache')<0){window.location.replace(window.location.href+(window.location.href.indexOf('?')>=0?'&':'?')+'nocache='+v);}}})();
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -271,10 +277,9 @@ async function doScan(){
   document.getElementById('stLbl').textContent='Aan het scannen';
   document.getElementById('stLbl').style.color='';
   document.getElementById('stUrl').textContent=url;
-  document.getElementById('stRow').innerHTML='<div class="dot"></div><span id="stMsg">Website ophalen…</span>';
+  document.getElementById('stRow').innerHTML='<div class="dot"></div><span id="stMsg">AI-analyse uitvoeren…</span>';
 
   try{
-    document.getElementById('stMsg').textContent='AI-analyse uitvoeren…';
     var groqCtrl=new AbortController();
     var groqTimer=setTimeout(function(){groqCtrl.abort();},20000);
     var gr=await fetch(GROQ_URL,{
