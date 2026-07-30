@@ -277,11 +277,12 @@ async function doScan(){
     var pageText='';
     try{
       document.getElementById('stMsg').textContent='Website ophalen…';
-      var pr=await fetch(PROXY+encodeURIComponent(url),{signal:AbortSignal.timeout(8000)});
-      if(pr.ok){
-        var html=await pr.text();
-        pageText=html.replace(/<script[\s\S]*?<\/script>/gi,'').replace(/<style[\s\S]*?<\/style>/gi,'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().slice(0,15000);
-      }
+      var PROXIES=['https://corsproxy.io/?','https://api.allorigins.win/raw?url='];
+      var html=await Promise.any(PROXIES.map(function(p){
+        return fetch(p+encodeURIComponent(url),{signal:AbortSignal.timeout(5000)})
+          .then(function(r){ if(!r.ok) throw new Error('bad'); return r.text(); });
+      }));
+      pageText=html.replace(/<script[\s\S]*?<\/script>/gi,'').replace(/<style[\s\S]*?<\/style>/gi,'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().slice(0,15000);
     }catch(e){ pageText='[Pagina niet bereikbaar via proxy. Analyseer op URL en domeinnaam.]'; }
 
     document.getElementById('stMsg').textContent='AI-analyse uitvoeren…';
